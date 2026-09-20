@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Edit Profile{% endblock %}
+
+{% block extra_head %}
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap5.min.css" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="col-lg-8 mx-auto">
+  <h2 class="mb-4">My Profile</h2>
+  <form method="post">
+    {% csrf_token %}
+
+    <h4>Headline</h4>
+    {{ form.non_field_errors }}
+    <div class="mb-3">
+      {{ form.headline }}
+      {{ form.headline.errors }}
+    </div>
+
+    <h4 class="mt-4">Skills</h4>
+    <div class="mb-3">
+      {{ form.skills }}
+      {{ form.skills.errors }}
+      <div class="form-text">Type to search, then click to add.</div>
+    </div>
+
+    <h4 class="mt-4">Education</h4>
+    {% include "accounts/_formset.html" with formset=education_formset %}
+
+    <h4 class="mt-4">Work Experience</h4>
+    {% include "accounts/_formset.html" with formset=experience_formset %}
+
+    <h4 class="mt-4">Links</h4>
+    {% include "accounts/_formset.html" with formset=link_formset %}
+
+    <button type="submit" class="btn btn-primary mt-3">Save profile</button>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
+<script>
+  new TomSelect("#id_skills", { plugins: ["remove_button"], maxOptions: null });
+</script>
+{% endblock %}
