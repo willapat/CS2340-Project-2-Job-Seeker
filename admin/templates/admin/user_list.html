@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Manage Users{% endblock %}
+{% block content %}
+<h2 class="mb-3">Manage Users</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Username</th>
+      <th>Email</th>
+      <th>Date joined</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in users %}
+    <tr>
+      <td>{{ u.username }}</td>
+      <td>{{ u.email }}</td>
+      <td>{{ u.date_joined|date:"M d, Y" }}</td>
+      <td>
+        <a href="{% url 'admin_panel:user_delete' u.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4">No users found.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

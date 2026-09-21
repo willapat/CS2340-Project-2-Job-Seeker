@@ -1,0 +1,25 @@
+{{ formset.management_form }}
+{{ formset.non_form_errors }}
+{% for form in formset %}
+  <div class="border rounded p-3 mb-3">
+    {{ form.non_field_errors }}
+    {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+    <div class="row g-2">
+      {% for field in form.visible_fields %}
+        {% if field.name != "DELETE" %}
+          <div class="{% if field.name == 'description' %}col-12{% else %}col-md-6{% endif %}">
+            <label class="form-label" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {{ field.errors }}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% if form.instance.pk %}
+      <div class="form-check mt-2">
+        {{ form.DELETE }}
+        <label class="form-check-label" for="{{ form.DELETE.id_for_label }}">Remove this entry</label>
+      </div>
+    {% endif %}
+  </div>
+{% endfor %}
