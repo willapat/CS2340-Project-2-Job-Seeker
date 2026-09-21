@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Job Search</title>
+</head>
+
+<body>
+    <h1>Search Jobs</h1>
+    <form method="get">
+        <input type="text" name="title" placeholder="Job title" value="{{ filters.title }}">
+        <input type="text" name="skills" placeholder="Skills (comma-separated)" value="{{ filters.skills }}">
+        <input type="text" name="location" placeholder="Location" value="{{ filters.location }}">
+        <input type="number" name="salary_min" placeholder="Min salary" value="{{ filters.salary_min }}">
+        <input type="number" name="salary_max" placeholder="Max salary" value="{{ filters.salary_max }}">
+        <select name="remote_type">
+            <option value="">Any</option>
+            <option value="Remote">Remote</option>
+            <option value="On-site">On-Site</option>
+            <option value="Hybrid">Hybrid</option>
+        </select>
+        <label><input type="checkbox" name="visa_sponsorship" {% if filters.visa_sponsorship=="on" %}checked{% endif %}>
+            Visa sponsorship</label>
+        <button type="submit">Search</button>
+    </form>
+    <ul>
+        {% for job in jobs %}
+        <li>{{ job.title }} - {{ job.company }} - {{ job.location }} - {{job.get_remote_type_display }}</li>
+        {% empty %}
+        <li>No jobs match your filters.</li>
+        {% endfor %}
+    </ul>
+</body>
+
+</html>
