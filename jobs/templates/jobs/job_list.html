@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3">Job Listings</h2>
+<a href="{% url 'jobs.create' %}" class="btn btn-primary">List a Job</a>
+{% for job in template_data.jobs %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">{{ job.title }}</h5>
+        <h6 class="card-subtitle mb-2">{{ job.company }} - {{ job.location }}</h6>
+        <p class="card-text">${{ job.salary_min }} - ${{ job.salary_max }}</p>
+        <p class="card-text">{% if job.remote %} remote {% endif %}</p>
+        <a href="{% url 'jobs.show' id=job.id %}" class="btn btn-primary">Details</a>
+    </div>
+</div>
+{% endfor %}
+{% endblock content %}
