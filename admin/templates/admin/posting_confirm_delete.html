@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Delete Posting{% endblock %}
+{% block content %}
+<div class="col-md-6 mx-auto">
+  <h2 class="mb-3">Delete posting?</h2>
+  <p>Are you sure you want to delete <strong>{{ job.title }}</strong> at {{ job.company }}? This cannot be undone.</p>
+  <form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Yes, delete</button>
+    <a href="{% url 'admin_panel:posting_list' %}" class="btn btn-outline-secondary">Cancel</a>
+  </form>
+</div>
+{% endblock %}
