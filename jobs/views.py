@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Job
 from django.contrib.auth.decorators import login_required
 from .forms import JobForm
+from applications.models import Application
 
 # Create your views here.
 def index(request):
@@ -15,6 +16,13 @@ def show(request, id):
     template_data = {}
     #template_data['title'] = job.title
     template_data['job'] = job
+    if request.user.is_authenticated:
+        template_data['has_applied'] = Application.objects.filter(
+            applicant=request.user,
+            job=job
+        ).exists()
+    else:
+        template_data['has_applied'] = False
     return render(request, 'jobs/job_detail.html', {'template_data': template_data})
 
 @login_required
