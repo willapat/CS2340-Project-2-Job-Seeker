@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
-from .models import Job
+from jobs.models import Job
 
 def index(request):
     return HttpResponse("Job Seeker app is running.")
@@ -13,7 +13,7 @@ def job_search(request):
     location = request.GET.get('location', '').strip()
     salary_min = request.GET.get('salary_min', '').strip()
     salary_max = request.GET.get('salary_max', '').strip()
-    remote_type = request.GET.get('remote_type', '').strip()
+    remote = request.GET.get('remote', '').strip()
     visa_sponsorship = request.GET.get('visa_sponsorship')
 
     if title:
@@ -32,8 +32,10 @@ def job_search(request):
     if salary_max.isdigit():
         jobs = jobs.filter(salary_max__lte=int(salary_max))
 
-    if remote_type:
-            jobs = jobs.filter(remote_type=remote_type)
+    if remote == 'true':
+        jobs = jobs.filter(remote=True)
+    elif remote == 'false':
+        jobs = jobs.filter(remote=False)
 
     if visa_sponsorship == 'on':
         jobs = jobs.filter(visa_sponsorship=True)
@@ -41,4 +43,7 @@ def job_search(request):
     return render(request, 'job_seeker/job_search.html', {
         'jobs': jobs,
         'filters': request.GET,
+        'remote_selected': remote == 'true',
+        'onsite_selected': remote == 'false',
+        'visa_checked': visa_sponsorship == 'on',
     })

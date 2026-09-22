@@ -13,11 +13,10 @@
         <input type="text" name="location" placeholder="Location" value="{{ filters.location }}">
         <input type="number" name="salary_min" placeholder="Min salary" value="{{ filters.salary_min }}">
         <input type="number" name="salary_max" placeholder="Max salary" value="{{ filters.salary_max }}">
-        <select name="remote_type">
+        <select name="remote">
             <option value="">Any</option>
-            <option value="Remote">Remote</option>
-            <option value="On-site">On-Site</option>
-            <option value="Hybrid">Hybrid</option>
+            <option value="true" {% if remote_selected %}selected{% endif %}>Remote</option>
+            <option value="false" {% if onsite_selected %}selected{% endif %}>On-site</option>
         </select>
         <label><input type="checkbox" name="visa_sponsorship" {% if filters.visa_sponsorship=="on" %}checked{% endif %}>
             Visa sponsorship</label>
@@ -25,7 +24,8 @@
     </form>
     <ul>
         {% for job in jobs %}
-        <li>{{ job.title }} - {{ job.company }} - {{ job.location }} - {{job.get_remote_type_display }}</li>
+        <li>{{ job.title }} - {{ job.company }} - {{ job.location }} - {% if job.remote %}Remote{% else %}On-site{%
+            endif %}</li>
         {% empty %}
         <li>No jobs match your filters.</li>
         {% endfor %}
