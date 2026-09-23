@@ -5,12 +5,13 @@ from .models import Job
 class JobForm(BootstrapMixin, forms.ModelForm):
     class Meta:
         model = Job
-        fields = ['title', 'company', 'location', 'remote', 'salary_min', 'salary_max', 'visa_sponsorship', 'description']
+        fields = ['title', 'company', 'location', 'remote', 'salary_min', 'salary_max', 'visa_sponsorship', 'skills', 'description']
         labels = {
             'remote': 'Remote',
             'salary_min': 'Minimum salary: $',
             'salary_max': 'Maximum salary: $',
             'visa_sponsorship': 'Available',
+            'skills': 'Skills (comma-separated)',
         }
         widgets = {
             'description': forms.Textarea(attrs={'rows':6}),
