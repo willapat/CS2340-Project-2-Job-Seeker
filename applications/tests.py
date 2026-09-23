@@ -11,38 +11,19 @@ from .models import Application
 class ApplicationTests(TestCase):
 
     def setUp(self):
-        self.recruiter = User.objects.create_user(
-            username='recruiter',
-            password='testpass123'
-        )
+        self.recruiter = User.objects.create_user(username='recruiter',password='testpassword123')
 
-        self.applicant = User.objects.create_user(
-            username='applicant',
-            password='testpass123'
-        )
+        
+        self.applicant = User.objects.create_user(username = 'applicant',password='testpassword123')
+       
+        
+        self.job = Job.objects.create(recruiter=self.recruiter, company = 'Test Company #1', title='Software Engineer', description = 'Test Job Description', salary_min=30000,salary_max=90000,remote=True,location='Atlanta',visa_sponsorship=False)
 
-        self.job = Job.objects.create(
-            recruiter=self.recruiter,
-            company='Test Company',
-            title='Software Engineer',
-            description='Test job description',
-            salary_min=50000,
-            salary_max=70000,
-            remote=True,
-            location='Atlanta',
-            visa_sponsorship=False
-        )
+    def test_note(self):
+        self.client.login(username='applicant',password='testpassword123')
 
-    def test_user_can_apply_with_note(self):
-        self.client.login(
-            username='applicant',
-            password='testpass123'
-        )
-
-        response = self.client.post(
-            reverse('applications.apply', args=[self.job.id]),
-            {'note': 'I am a great fit for this position.'}
-        )
+        
+        self.client.post(reverse('applications.apply',args=[self.job.id]), {'note': 'I am a great fit for this position. I would appreciate the opportunity to work here'})
 
         self.assertEqual(Application.objects.count(), 1)
 
@@ -50,20 +31,15 @@ class ApplicationTests(TestCase):
 
         self.assertEqual(application.applicant, self.applicant)
         self.assertEqual(application.job, self.job)
-        self.assertEqual(
-            application.note,
-            'I am a great fit for this position.'
-        )
+        
+        self.assertEqual(application.note, 'I am a great fit for this position. I would appreciate the opportunity to work here')
 
-    def test_user_cannot_apply_twice(self):
-        self.client.login(
-            username='applicant',
-            password='testpass123'
-        )
+    def test_two_wall(self):
+        self.client.login(username='applicant',password='testpassword123')
 
-        url = reverse('applications.apply', args=[self.job.id])
+        url = reverse('applications.apply',args=[self.job.id])
 
-        self.client.post(url, {'note': 'First application'})
-        self.client.post(url, {'note': 'Second application'})
+        self.client.post(url,{'note': 'First application'})
+        self.client.post(url,{'note': 'Second application'})
 
         self.assertEqual(Application.objects.count(), 1)

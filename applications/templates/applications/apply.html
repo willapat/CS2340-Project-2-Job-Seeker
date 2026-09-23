@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
 <div class="card mb-3">
     <div class="card-body">
         <h2>Apply to {{ template_data.job.title }}</h2>
@@ -13,9 +14,7 @@
             {% csrf_token %}
 
             <div class="mb-3">
-                <label for="note" class="form-label">
-                    Tailored Note
-                </label>
+                <label for="note" class="form-label">Tailored Note</label>
 
                 <textarea
                     class="form-control"
@@ -26,14 +25,9 @@
                 ></textarea>
             </div>
 
-            <button type="submit" class="btn btn-success">
-                Submit Application
-            </button>
+            <button type="submit" class="btn btn-success"> Submit Application </button>
 
-            <a href="{% url 'jobs.show' id=template_data.job.id %}"
-               class="btn btn-secondary">
-                Cancel
-            </a>
+            <a href="{% url 'jobs.show' id=template_data.job.id %}" class="btn btn-secondary"> Cancel</a>
         </form>
     </div>
 </div>

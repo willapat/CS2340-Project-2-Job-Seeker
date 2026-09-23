@@ -17,13 +17,15 @@ def show(request, id):
     #template_data['title'] = job.title
     template_data['job'] = job
     if request.user.is_authenticated:
-        template_data['has_applied'] = Application.objects.filter(
-            applicant=request.user,
-            job=job
-        ).exists()
+        applications = Application.objects.filter(applicant=request.user,job=job)
+        if applications:
+            template_data['has_applied'] = True
+        else:
+            template_data['has_applied'] = False
     else:
         template_data['has_applied'] = False
-    return render(request, 'jobs/job_detail.html', {'template_data': template_data})
+    return render(request,'jobs/job_detail.html',{'template_data':template_data})
+    
 
 @login_required
 def create(request):
@@ -64,3 +66,4 @@ def edit(request, id):
 
 # def apply(request): 
 #     return
+#apply is in view
