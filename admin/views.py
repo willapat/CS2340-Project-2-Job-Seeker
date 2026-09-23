@@ -31,7 +31,10 @@ def user_delete(request, user_id):
 @user_passes_test(is_admin)
 def posting_list(request):
     postings = Job.objects.select_related("recruiter").order_by("-date")
-    return render(request, "admin/posting_list.html", {"postings": postings})
+    query = request.GET.get("q", "").strip()
+    if query:
+        postings = postings.filter(title__icontains=query) | postings.filter(company__icontains=query)
+    return render(request, "admin/posting_list.html", {"postings": postings, "query": query})
 
 
 @user_passes_test(is_admin)
