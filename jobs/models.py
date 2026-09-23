@@ -14,7 +14,7 @@ class Job(models.Model):
     salary_max = models.IntegerField()
     remote = models.BooleanField(default=False)
     location = models.CharField(max_length=255) #may need to make this work with google maps later
-    #skills = models.TextField()
+    skills = models.TextField(blank=True, default='')
     visa_sponsorship = models.BooleanField(default=False)
     #removed = models.BooleanField(default=False)
     def __str__(self):
