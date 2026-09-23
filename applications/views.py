@@ -9,31 +9,23 @@ from .models import Application
 
 
 @login_required
-
 def apply(request, job_id):
     job = get_object_or_404(Job, id=job_id)
-    if Application.objects.filter(
-        applicant=request.user,
-        job=job
-    ).exists():
-        return redirect('jobs.show', id=job.id)
+    applications = Application.objects.filter(applicant=request.user,job=job)
+
+    if applications: 
+        return redirect('jobs.show', id = job.id)
+   
     if request.method == 'GET':
+
         template_data = {}
         template_data['job'] = job
 
-        return render(
-            request,
-            'applications/apply.html',
-            {'template_data': template_data}
-        )
+        return render(request,'applications/apply.html',{'template_data': template_data})
 
     elif request.method == 'POST':
         note = request.POST.get('note', '')
 
-        Application.objects.create(
-            applicant=request.user,
-            job=job,
-            note=note
-        )
+        Application.objects.create(applicant = request.user, job = job, note = note)
 
         return redirect('jobs.show', id=job.id)
