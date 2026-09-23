@@ -2,6 +2,10 @@
 {% block title %}Manage Postings{% endblock %}
 {% block content %}
 <h2 class="mb-3">Manage Postings</h2>
+<form method="get" class="mb-3 d-flex gap-2">
+  <input type="text" name="q" value="{{ query }}" class="form-control" placeholder="Search by title or company">
+  <button type="submit" class="btn btn-outline-primary">Search</button>
+</form>
 <table class="table table-striped">
   <thead>
     <tr>
