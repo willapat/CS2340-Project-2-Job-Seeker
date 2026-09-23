@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h2>Apply to {{ template_data.job.title }}</h2>
+
+        <h5 class="mb-3">
+            {{ template_data.job.company }}
+        </h5>
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label for="note" class="form-label">
+                    Tailored Note
+                </label>
+
+                <textarea
+                    class="form-control"
+                    id="note"
+                    name="note"
+                    rows="5"
+                    placeholder="Tell the recruiter why you're a good fit for this position..."
+                ></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-success">
+                Submit Application
+            </button>
+
+            <a href="{% url 'jobs.show' id=template_data.job.id %}"
+               class="btn btn-secondary">
+                Cancel
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock content %}

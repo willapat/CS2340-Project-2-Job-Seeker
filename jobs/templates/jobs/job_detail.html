@@ -12,6 +12,15 @@
         <a href="{% url 'jobs.edit' id=template_data.job.id %}" class="btn btn-primary">Edit this Posting</a>
         {% endif %}
         <!-- include an apply button here later -->
+       {% if user.is_authenticated and user != template_data.job.recruiter %}
+        {% if template_data.has_applied %}
+            <button class="btn btn-secondary" disabled>Applied</button>
+        {% else %}
+        <a href="{% url 'applications.apply' job_id=template_data.job.id %}"class="btn btn-success">
+            Apply
+        </a>
+    {% endif %}
+{% endif %}
     </div>
 </div>
 {% endblock content %}
