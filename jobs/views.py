@@ -12,7 +12,7 @@ def index(request):
     return render(request, 'jobs/job_list.html', {'template_data': template_data})
 
 def show(request, id):
-    job = Job.objects.get(id=id)
+    job = get_object_or_404(Job, id=id)
     template_data = {}
     #template_data['title'] = job.title
     template_data['job'] = job

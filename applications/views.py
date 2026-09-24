@@ -7,6 +7,11 @@ from django.contrib.auth.decorators import login_required
 from jobs.models import Job
 from .models import Application
 
+def index(request):
+    template_data = {}
+    #template_data['title'] = 'Applications'
+    template_data['applications'] = Application.objects.filter(applicant=request.user).order_by('-date_applied')
+    return render(request, 'applications/my_applications.html', {'template_data': template_data})
 
 @login_required
 def apply(request, job_id):
@@ -29,3 +34,4 @@ def apply(request, job_id):
         Application.objects.create(applicant = request.user, job = job, note = note)
 
         return redirect('jobs.show', id=job.id)
+
