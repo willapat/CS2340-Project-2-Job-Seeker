@@ -6,12 +6,13 @@ from jobs.models import Job
 
 class Application(models.Model):
     
+    status_options = [ ('applied', 'Applied'), ('review', 'Review'), ('interview', 'Interview'), ('offer', 'Offer'), ('closed', 'Closed')]
+
     applicant = models.ForeignKey(User,on_delete=models.CASCADE)
     job = models.ForeignKey(Job,on_delete=models.CASCADE)
     note = models.TextField(blank =True)
-    
     date_applied = models.DateTimeField(auto_now_add= True)
-
+    status = models.CharField(max_length = 10, choices = status_options, default = 'applied')
     
-    def _str_(self):
+    def __str__(self):
         return f"{self.applicant.username} -{self.job.title}"

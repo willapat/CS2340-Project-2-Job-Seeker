@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2 class="mb-3">My Applications</h2>
+{% for application in template_data.applications %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">{{ application.job.title }}</h5>
+        <h6 class="card-subtitle mb-2">{{ application.job.company }}</h6>
+        <p class="card-text">Status: {{ application.get_status_display }}</p>
+        <a href="{% url 'jobs.show' id=application.job.id %}" class="btn btn-primary">Details</a>
+    </div>
+</div>
+{% endfor %}
+{% endblock content %}
