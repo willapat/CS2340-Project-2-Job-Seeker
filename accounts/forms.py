@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.forms import inlineformset_factory
 
-from .models import Education, Link, Profile, WorkExperience
+from .models import Education, Link, Profile, WorkExperience, SkillChoice
 
 
 class BootstrapMixin:
@@ -11,7 +11,7 @@ class BootstrapMixin:
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             widget = field.widget
-            if isinstance(widget, forms.CheckboxInput):
+            if isinstance(widget, (forms.CheckboxInput, forms.CheckboxSelectMultiple, forms.RadioSelect)):
                 css = "form-check-input"
             elif isinstance(widget, forms.Select):  # includes SelectMultiple
                 css = "form-select"
@@ -21,6 +21,8 @@ class BootstrapMixin:
 
 
 class SignUpForm(BootstrapMixin, UserCreationForm):
+    role = forms.ChoiceField(choices=Profile.roles.choices, required=True)
+
     email = forms.EmailField(required=True)
 
     class Meta(UserCreationForm.Meta):
@@ -32,6 +34,11 @@ class LoginForm(BootstrapMixin, AuthenticationForm):
 
 
 class ProfileForm(BootstrapMixin, forms.ModelForm):
+    skills = forms.MultipleChoiceField(
+        choices=SkillChoice.choices,
+        widget=forms.SelectMultiple,
+        required=False,
+    )
     class Meta:
         model = Profile
         fields = ["headline", "skills"]
