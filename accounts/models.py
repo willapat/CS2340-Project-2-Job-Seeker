@@ -4,24 +4,42 @@ from django.db import models
 from django.conf import settings
 
 
-class Skill(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    category = models.CharField(max_length=100, blank=True)
-
-    class Meta:
-        ordering = ["name"]
-
-    def __str__(self):
-        return self.name
+class SkillChoice(models.TextChoices):
+    PROGRAMMING = "programming", "Programming"
+    DESIGN = "design", "Design"
+    MARKETING = "marketing", "Marketing"
+    FRONTEND = "frontend", "Frontend"
+    BACKEND = "backend", "Backend"
+    FULLSTACK = "fullstack", "Fullstack"
+    MOBILE_DEVELOPMENT = "mobile_development", "Mobile Development"
+    WEB_DEVELOPMENT = "web_development", "Web Development"
+    COMMUNICATION = "communication", "Communication"
+    TEAMWORK = "teamwork", "Teamwork"
+    ORGANIZATION = "organization", "Organization"
+    DATABASE_DESIGN = "database_design", "Database Design"
+    SALES = "sales", "Sales"
+    LEADERSHIP = "leadership", "Leadership"
 
 
 class Profile(models.Model):
+    class roles(models.TextChoices):
+        RECRUITER = "recruiter", "Recruiter"
+        CANDIDATE = "candidate", "Candidate"
+
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     headline = models.CharField(max_length=200, blank=True)
-    skills = models.ManyToManyField(Skill, blank=True, related_name="profiles")
+    skills = models.JSONField(default=list, blank=True)
 
     def __str__(self):
         return f"{self.user}'s profile"
+    
+    @property
+    def is_recruiter(self):
+        return self.user.role == self.roles.RECRUITER
+    
+    @property
+    def is_candidate(self):
+        return self.user.role == self.roles.CANDIDATE
 
 
 class Education(models.Model):
