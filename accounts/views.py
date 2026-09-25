@@ -17,7 +17,7 @@ def signup(request):
     form = SignUpForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         user = form.save()
-        Profile.objects.get_or_create(user=user)
+        Profile.objects.get_or_create(user=user, defaults={"role": form.cleaned_data["role"]})
         login(request, user)
         return redirect("accounts:profile_edit")
     return render(request, "accounts/register.html", {"form": form})
