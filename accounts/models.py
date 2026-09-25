@@ -29,17 +29,18 @@ class Profile(models.Model):
     user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     headline = models.CharField(max_length=200, blank=True)
     skills = models.JSONField(default=list, blank=True)
+    role = models.CharField(max_length=20, choices=roles.choices, default=roles.CANDIDATE)
 
     def __str__(self):
         return f"{self.user}'s profile"
     
     @property
     def is_recruiter(self):
-        return self.user.role == self.roles.RECRUITER
+        return self.role == self.roles.RECRUITER
     
     @property
     def is_candidate(self):
-        return self.user.role == self.roles.CANDIDATE
+        return self.role == self.roles.CANDIDATE
 
 
 class Education(models.Model):

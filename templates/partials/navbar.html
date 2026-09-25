@@ -1,24 +1,29 @@
-<nav class="navbar navbar-expand navbar-dark bg-dark mb-4">
+<nav class="p-3 navbar navbar-dark bg-dark navbar-expand-lg mb-4">
   <div class="container">
-    <a class="navbar-brand" href="/">Job Seeker</a>
-    <ul class="navbar-nav ms-auto align-items-center">
-      {% if user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'applications.index' %}">My Applications</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'accounts:profile_edit' %}">My Profile</a>
-        </li>
-        <li class="nav-item">
-          <form method="post" action="{% url 'accounts:logout' %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-link nav-link">Log out</button>
-          </form>
-        </li>
-      {% else %}
-        <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">Log in</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'accounts:signup' %}">Sign up</a></li>
-      {% endif %}
-    </ul>
+    <a class="navbar-brand" href="{% url 'job_seeker:index' %}">Job Seeker</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav ms-auto">
+        <a class="nav-link" href="{% url 'jobs.index' %}">Jobs</a>
+        {% if user.profile.is_candidate %}
+        <a class="nav-link" href="{% url 'applications.index' %}">My Applications</a>
+        <a class="nav-link" href="{% url 'accounts:profile_edit' %}">My Profile</a>
+        {% elif user.profile.is_recruiter %}
+        <a class="nav-link" href="{% url 'jobs.create' %}">Post a Job</a>
+        {% endif %}
+        <div class="vr bg-white mx-2 d-none d-lg-block"></div>
+        {% if user.is_authenticated %}
+        <form method="post" action="{% url 'accounts:logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="nav-link">Logout ({{ user.username }})</button>
+        </form>
+        {% else %}
+        <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
+        <a class="nav-link" href="{% url 'accounts:signup' %}">Sign Up</a>
+        {% endif %}
+      </div>
+    </div>
   </div>
 </nav>

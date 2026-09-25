@@ -1,16 +1,59 @@
 {% extends 'base.html' %}
 {% block content %}
 <h2 class="mb-3">Job Listings</h2>
-<a href="{% url 'jobs.create' %}" class="btn btn-primary">List a Job</a>
+{% if user.profile.is_recruiter %}
+<a href="{% url 'jobs.create' %}" class="btn btn-primary mb-3">List a Job</a>
+{% endif %}
+
+<!-- this is the search form from US2
+it was moved here from job_seeker/job_search.html -->
+
+<form method="GET" class="row g-2 mb-4">
+    <div class="col-md-4">
+        <input type="text" name="title" class="form-control" placeholder="Job title" value="{{ template_data.filters.title }}">
+    </div>
+    <div class="col-md-4">
+        <input type="text" name="skills" class="form-control" placeholder="Skills (comma-separated)" value="{{ template_data.filters.skills }}">
+    </div>
+    <div class="col-md-4">
+        <input type="text" name="location" class="form-control" placeholder="Location" value="{{ template_data.filters.location }}">
+    </div>
+    <div class="col-md-3">
+        <input type="number" name="salary_min" class="form-control" placeholder="Min salary" value="{{ template_data.filters.salary_min }}">
+    </div>
+    <div class="col-md-3">
+        <input type="number" name="salary_max" class="form-control" placeholder="Max salary" value="{{ template_data.filters.salary_max }}">
+    </div>
+    <div class="col-md-3">
+        <select name="remote" class="form-select">
+            <option value="">Any</option>
+            <option value="true" {% if template_data.remote_selected %}selected{% endif %}>Remote</option>
+            <option value="false" {% if template_data.onsite_selected %}selected{% endif %}>On-site</option>
+        </select>
+    </div>
+    <div class="col-md-3 d-flex align-items-center">
+        <div class="form-check">
+            <input type="checkbox" name="visa_sponsorship" id="visa" class="form-check-input" {% if template_data.visa_checked %}checked{% endif %}>
+            <label for="visa" class="form-check-label">Visa sponsorship</label>
+        </div>
+    </div>
+    <div class="col-12">
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a href="{% url 'jobs.index' %}" class="btn btn-outline-secondary">Clear</a>
+    </div>
+</form>
+
 {% for job in template_data.jobs %}
 <div class="card mb-3">
     <div class="card-body">
         <h5 class="card-title">{{ job.title }}</h5>
         <h6 class="card-subtitle mb-2">{{ job.company }} - {{ job.location }}</h6>
         <p class="card-text">${{ job.salary_min }} - ${{ job.salary_max }}</p>
-        <p class="card-text">{% if job.remote %} remote {% endif %}</p>
+        <p class="card-text">{% if job.remote %}Remote{% else %}On-site{% endif %}</p>
         <a href="{% url 'jobs.show' id=job.id %}" class="btn btn-primary">Details</a>
     </div>
 </div>
+{% empty %}
+<p class="text-muted">No jobs match your filters.</p>
 {% endfor %}
 {% endblock content %}

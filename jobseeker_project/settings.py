@@ -128,5 +128,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = 'accounts:login'
-LOGIN_REDIRECT_URL = 'accounts:profile_edit'
+LOGIN_REDIRECT_URL = 'job_seeker:index' #did this so everyone goes home after login
 LOGOUT_REDIRECT_URL = 'accounts:login'
