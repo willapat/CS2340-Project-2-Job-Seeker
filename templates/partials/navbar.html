@@ -8,6 +8,7 @@
       <div class="navbar-nav ms-auto">
         <a class="nav-link" href="{% url 'jobs.index' %}">Jobs</a>
         {% if user.profile.is_candidate %}
+        <a class="nav-link" href="{% url 'cart.index' %}">Cart</a>
         <a class="nav-link" href="{% url 'applications.index' %}">My Applications</a>
         <a class="nav-link" href="{% url 'accounts:profile_edit' %}">My Profile</a>
         {% elif user.profile.is_recruiter %}

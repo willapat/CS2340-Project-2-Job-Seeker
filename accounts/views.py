@@ -17,9 +17,7 @@ def signup(request):
     form = SignUpForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         user = form.save()
-        profile, _ = Profile.objects.get_or_create(user=user)
-        profile.role = form.cleaned_data["role"]
-        profile.save()
+        Profile.objects.get_or_create(user=user, defaults={"role": form.cleaned_data["role"]})
         login(request, user)
         return redirect("job_seeker:index")
     return render(request, "accounts/register.html", {"form": form})
