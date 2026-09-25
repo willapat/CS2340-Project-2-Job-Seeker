@@ -13,13 +13,13 @@ from .models import Profile
 
 def signup(request):
     if request.user.is_authenticated:
-        return redirect("accounts:profile_edit")
+        return redirect("job_seeker:index")
     form = SignUpForm(request.POST or None)
     if request.method == "POST" and form.is_valid():
         user = form.save()
         Profile.objects.get_or_create(user=user, defaults={"role": form.cleaned_data["role"]})
         login(request, user)
-        return redirect("accounts:profile_edit")
+        return redirect("job_seeker:index")
     return render(request, "accounts/register.html", {"form": form})
 
 

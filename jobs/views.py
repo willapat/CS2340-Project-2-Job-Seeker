@@ -6,10 +6,57 @@ from applications.models import Application
 
 # Create your views here.
 def index(request):
+# def index(request):
+    #job list and search (US2) are merged here
+    #filters come from the search form that was moved to job_list.html
+    #moved here from the job_search() method in job_seeker/views.py
+    jobs = Job.objects.all()
+
+    #Zane's search code (US2)
+    title = request.GET.get('title', '').strip()
+    skills = request.GET.get('skills', '').strip()
+    location = request.GET.get('location', '').strip()
+    salary_min = request.GET.get('salary_min', '').strip()
+    salary_max = request.GET.get('salary_max', '').strip()
+    remote = request.GET.get('remote', '').strip()
+    visa_sponsorship = request.GET.get('visa_sponsorship')
+
+    if title:
+        jobs = jobs.filter(title__icontains=title)
+
+    if skills:
+        for skill in [s.strip() for s in skills.split(',') if s.strip()]:
+            jobs = jobs.filter(skills__icontains=skill)
+
+    if location:
+        jobs = jobs.filter(location__icontains=location)
+
+    if salary_min.isdigit():
+        jobs = jobs.filter(salary_min__gte=int(salary_min))
+
+    if salary_max.isdigit():
+        jobs = jobs.filter(salary_max__lte=int(salary_max))
+
+    if remote == 'true':
+        jobs = jobs.filter(remote=True)
+    elif remote == 'false':
+        jobs = jobs.filter(remote=False)
+
+    if visa_sponsorship == 'on':
+        jobs = jobs.filter(visa_sponsorship=True)
+
     template_data = {}
-    #template_data['title'] = 'Jobs'
-    template_data['jobs'] = Job.objects.all()
+    template_data['jobs'] = jobs
+    template_data['filters'] = request.GET
+    template_data['remote_selected'] = remote == 'true'
+    template_data['onsite_selected'] = remote == 'false'
+    template_data['visa_checked'] = visa_sponsorship == 'on'
     return render(request, 'jobs/job_list.html', {'template_data': template_data})
+
+    # template_data = {}
+    # #template_data['title'] = 'Jobs'
+    # template_data['jobs'] = Job.objects.all()
+    # return render(request, 'jobs/job_list.html', {'template_data': template_data})
 
 def show(request, id):
     job = get_object_or_404(Job, id=id)

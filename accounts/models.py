@@ -30,6 +30,7 @@ class Profile(models.Model):
     role = models.CharField(max_length=20, choices=roles.choices, default=roles.CANDIDATE)
     headline = models.CharField(max_length=200, blank=True)
     skills = models.JSONField(default=list, blank=True)
+    role = models.CharField(max_length=20, choices=roles.choices, default=roles.CANDIDATE)
 
     def __str__(self):
         return f"{self.user}'s profile"
