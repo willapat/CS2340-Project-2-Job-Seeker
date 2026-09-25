@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}My Cart{% endblock %}
+{% block content %}
+<h2 class="mb-3">My Cart</h2>
+{% if template_data.jobs %}
+<div class="table-responsive">
+    <table class="table table-bordered align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Title</th>
+                <th>Company</th>
+                <th>Location</th>
+                <th>Salary</th>
+                <th>Remote</th>
+                <th>Visa Sponsorship</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job in template_data.jobs %}
+            <tr>
+                <td>{{ job.title }}</td>
+                <td>{{ job.company }}</td>
+                <td>{{ job.location }}</td>
+                <td>${{ job.salary_min }} - ${{ job.salary_max }}</td>
+                <td>{% if job.remote %}Yes{% else %}No{% endif %}</td>
+                <td>{% if job.visa_sponsorship %}Yes{% else %}No{% endif %}</td>
+                <td>
+                    <div class="d-flex flex-wrap gap-2">
+                        <a href="{% url 'jobs.show' id=job.id %}" class="btn btn-primary btn-sm">Details</a>
+                        <form method="POST" action="{% url 'cart.remove' id=job.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Remove</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="text-muted">Your cart is empty.</p>
+{% endif %}
+{% endblock content %}
